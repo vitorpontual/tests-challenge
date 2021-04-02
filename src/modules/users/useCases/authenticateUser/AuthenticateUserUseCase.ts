@@ -2,11 +2,15 @@ import { inject, injectable } from "tsyringe";
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
+
 import authConfig from '../../../../config/auth';
 
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IAuthenticateUserResponseDTO } from "./IAuthenticateUserResponseDTO";
 import { IncorrectEmailOrPasswordError } from "./IncorrectEmailOrPasswordError";
+
+
+
 
 interface IRequest {
   email: string;
@@ -34,6 +38,7 @@ export class AuthenticateUserUseCase {
     }
 
     const { secret, expiresIn } = authConfig.jwt;
+    console.log(secret, expiresIn)
 
     const token = sign({ user }, secret, {
       subject: user.id,
