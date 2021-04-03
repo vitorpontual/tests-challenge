@@ -1,8 +1,11 @@
 import { hash } from "bcryptjs"
 import  request  from "supertest"
-import { Connection, createConnection } from "typeorm"
+import { Connection } from "typeorm"
 import { v4 as uuid} from "uuid"
 import { app } from "../../../../app"
+
+import  createConnection  from "../../../../database/index"
+
 
 
 let connection: Connection
@@ -11,21 +14,8 @@ describe("Create User", () => {
   beforeAll(async () => {
     connection = await createConnection();
     await connection.runMigrations();
-
-    const id = uuid();
-
-    const password = await hash("admin", 8);
-
-    await connection.query(`
-    INSERT INTO users(
-      id,
-      name,
-      password,
-      email,
-      created_at
-      ) VALUES ('${id}', 'admin', '${password}', 'admin@admin.com', 'now()')
-      `);
-
+    console.log("migration create")
+    
   })
 
   afterAll(async () => {
@@ -33,12 +23,14 @@ describe("Create User", () => {
     await connection.close();
   })
 
+
   it("should be able to create a new user", async () => {
     const response = await request(app).post("/api/v1/users").send({
-      name: "Brian",
-      email: "brian@test.com",
+      name: "james",
+      email: "aloprado@email.com",
       password: "1234"
     })
+
 
     expect(response.status).toBe(201)
   })
@@ -55,7 +47,7 @@ describe("Create User", () => {
       password: "1234"
     })
 
-    expect(user1.status).toBe(400)
+    expect(user2.status).toBe(400)
 
    
 

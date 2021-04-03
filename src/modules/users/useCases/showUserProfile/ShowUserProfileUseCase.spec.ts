@@ -14,6 +14,8 @@ describe("Show User Profile", () => {
         showUserProfileUseCase = new ShowUserProfileUseCase(inMemoryUserRepository);
         createUserUseCase = new CreateUserUseCase(inMemoryUserRepository);
 
+        
+
   })
 
   it("should be able show User Profile", async () => {
