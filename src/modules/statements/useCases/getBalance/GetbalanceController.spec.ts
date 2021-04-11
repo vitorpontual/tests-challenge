@@ -1,5 +1,5 @@
 import request from "supertest";
-import { Connection } from "typeorm";
+import { Connection, UsingJoinColumnOnlyOnOneSideAllowedError } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
 import { app } from "../../../../app";

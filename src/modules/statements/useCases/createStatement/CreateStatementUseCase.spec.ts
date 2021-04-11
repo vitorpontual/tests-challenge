@@ -1,6 +1,8 @@
+import { create } from "node:domain";
 import { AppError } from "../../../../shared/errors/AppError";
 import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/InMemoryUsersRepository";
 import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUserUseCase";
+import { OperationType } from "../../entities/Statement";
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository"
 import { GetBalanceUseCase } from "../getBalance/GetBalanceUseCase";
 import { CreateStatementUseCase } from "./CreateStatementUseCase";
@@ -23,10 +25,7 @@ describe("Create Statement", () => {
 
 
   it("should be able to create a new deposit statement", async () => {
-    enum OperationType {
-      DEPOSIT = "deposit",
-      WITHDRAW = "withdraw"
-    };
+   
 
     const user = await createUserUseCase.execute({
       name: "user",
@@ -37,14 +36,15 @@ describe("Create Statement", () => {
     const statement = await createStatementUseCase.execute({
       user_id : user.id as string,
       description: "deposit",
-      amount: 89,
-      type: "deposit" as OperationType
+      amount: 50,
+      type: OperationType.DEPOSIT
     })
+
 
     expect(statement).toHaveProperty("id")
     expect(statement).toHaveProperty("description")
     expect(statement).toHaveProperty("user_id")
-    expect(statement.amount).toEqual(89)
+    expect(statement.amount).toEqual(50)
     expect(statement.type).toEqual("deposit")
     
   })
@@ -84,6 +84,41 @@ describe("Create Statement", () => {
   
   
   })
+
+  it('should be able to create a new transfer statement ', async () => {
+    const user1 = await createUserUseCase.execute({
+      name: 'user1',
+      email: 'x3@mail.com',
+      password: 'user1'
+    })
+
+    const user2 = await createUserUseCase.execute({
+      name: 'user2',
+      email: 'x2@mail.com',
+      password: 'user2'
+    })
+
+
+    await createStatementUseCase.execute({
+      user_id: user1.id as string,
+      description: 'depoist',
+      type: OperationType.DEPOSIT,
+      amount: 50,
+    })
+
+    const transfer = await createStatementUseCase.execute({
+      user_id: user2.id as string,
+      sender_id: user1.id as string, 
+      description: 'transfer to user2',
+      type: OperationType.TRANSFER,
+      amount: 45
+    })
+
+    expect(transfer.amount).toEqual(45)
+    expect(transfer.sender_id).toBe(user1.id)
+    expect(transfer.user_id).toBe(user2.id)
+    
+  } )
 
   it("should not be to create a new statement if user no funds", async () => {
     expect(async () => {

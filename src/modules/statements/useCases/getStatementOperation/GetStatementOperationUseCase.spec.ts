@@ -3,6 +3,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/InMemoryUsersRepository";
 import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUserUseCase";
 import { ICreateUserDTO } from "../../../users/useCases/createUser/ICreateUserDTO";
+import { OperationType } from "../../entities/Statement";
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
 import { CreateStatementUseCase } from "../createStatement/CreateStatementUseCase";
 import { GetBalanceUseCase } from "../getBalance/GetBalanceUseCase";
@@ -26,10 +27,6 @@ describe("Create Statement", () => {
   })
 
   it("should be able get an Operation Statement", async () => {
-    enum OperationType {
-      DEPOSIT = "deposit",
-      WITHDRAW = "withdraw"
-    }
 
     const userDTO: ICreateUserDTO = {
       name: "user",

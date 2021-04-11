@@ -37,13 +37,13 @@ describe("Statements", () => {
     })
     .set({ Authorization: `Bearer ${token}`})
 
-    const { id} = responseStatement.body
+    const { id } = responseStatement.body
 
     const url = `/api/v1/statements/${id}`
 
-    const response = await request(app).get(url).set({ Authorization: `Bearer ${token}`})
+    const response = await request(app).post(url).set({ Authorization: `Bearer ${token}`})
 
-    console.log(response.body)
+
     
     expect(response.body.amount).toBe("100.00")
     expect(response.status).toBe(200)

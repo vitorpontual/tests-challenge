@@ -27,6 +27,7 @@ describe("Get Balance", () => {
     enum OperationType {
       DEPOSIT = 'deposit',
       WITHDRAW = 'withdraw',
+      TRANSFER = 'transfer'
     }
 
     const user = await createUserUseCase.execute({

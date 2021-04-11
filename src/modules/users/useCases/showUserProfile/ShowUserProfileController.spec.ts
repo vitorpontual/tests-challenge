@@ -11,7 +11,6 @@ describe("Show User", () => {
   beforeAll(async () => {
     connection = await createConnection();
     await connection.runMigrations();
-    console.log("migration Show")
   })
 
   afterAll(async () => {
